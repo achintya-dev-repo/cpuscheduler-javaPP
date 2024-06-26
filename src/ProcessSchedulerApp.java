@@ -3,6 +3,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.util.ArrayList;
+// import java.util.Collections;
 import java.util.List;
 
 public class ProcessSchedulerApp {
@@ -20,9 +21,18 @@ class WelcomeScreenUI extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/background.jpg"));
+
+        // Create a custom JPanel to display the background image
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.black); // Set background color
+
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -35,15 +45,33 @@ class WelcomeScreenUI extends JFrame {
         gbc.gridwidth = 2;
         panel.add(welcomeLabel, gbc);
 
-        JButton startButton = new JButton("Start");
+        JButton ourAlgorithmButton = new JButton("SJF Priority");
+        ourAlgorithmButton.setBackground(Color.YELLOW);
+        ourAlgorithmButton.setForeground(Color.black);
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 2;
-        panel.add(startButton, gbc);
+        gbc.gridheight = 2;
+        panel.add(ourAlgorithmButton, gbc);
 
-        startButton.addActionListener(e -> {
+        JButton sjfButton = new JButton("SJF Non-Preemptive");
+        sjfButton.setBackground(Color.YELLOW);
+        sjfButton.setForeground(Color.black);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        gbc.gridheight = 2;
+        panel.add(sjfButton, gbc);
+
+        ourAlgorithmButton.addActionListener(e -> {
             dispose();
             new ProcessSchedulerUI().setVisible(true);
+        });
+
+        // SJF button functionality can be added later
+        sjfButton.addActionListener(e -> {
+            dispose();
+            new SJFNonPreemptiveUI().setVisible(true);
         });
 
         add(panel);
@@ -53,26 +81,50 @@ class WelcomeScreenUI extends JFrame {
 
 class ProcessSchedulerUI extends JFrame {
     public ProcessSchedulerUI() {
-        setTitle("Process Scheduler");
+        setTitle("Process Scheduling");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JPanel panel = new JPanel();
+        // Load the background image from the src folder
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/background.jpg"));
+
+        // Create a custom JPanel to display the background image
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
         panel.setLayout(new GridBagLayout());
-        panel.setBackground(Color.CYAN);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(5, 5, 5, 5);
 
-        JLabel titleLabel = new JLabel("PROCESS SCHEDULER");
+        JLabel titleLabel = new JLabel("SJF PRIORITY BASED");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground((Color.white));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         panel.add(titleLabel, gbc);
 
+        JButton BackButton = new JButton("Back");
+        BackButton.setBackground(Color.YELLOW);
+        BackButton.setForeground(Color.BLACK);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(BackButton, gbc);
+
+        BackButton.addActionListener(e -> {
+            dispose();
+            new WelcomeScreenUI().setVisible(true);
+        });
+
         JLabel burstTimeLabel = new JLabel("Burst Time");
+        burstTimeLabel.setForeground(Color.white);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -85,6 +137,7 @@ class ProcessSchedulerUI extends JFrame {
         panel.add(burstTimeField, gbc);
 
         JLabel arrivalTimeLabel = new JLabel("Arrival Time");
+        arrivalTimeLabel.setForeground(Color.white);
         gbc.gridx = 0;
         gbc.gridy = 2;
         panel.add(arrivalTimeLabel, gbc);
@@ -96,6 +149,7 @@ class ProcessSchedulerUI extends JFrame {
         panel.add(arrivalTimeField, gbc);
 
         JLabel priorityLabel = new JLabel("Priority");
+        priorityLabel.setForeground(Color.white);
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(priorityLabel, gbc);
@@ -248,6 +302,169 @@ class ProcessSchedulerUI extends JFrame {
 
         add(panel);
         setLocationRelativeTo(null);
+    }
+}
+
+class SJFNonPreemptiveUI extends JFrame {
+
+    public SJFNonPreemptiveUI() {
+        setTitle("Process Scheduling - SJF Non-Preemptive");
+        setSize(800, 600);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        // Load the background image from the src folder
+        ImageIcon backgroundImage = new ImageIcon(getClass().getResource("/background.jpg"));
+
+        // Create a custom JPanel to display the background image
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        panel.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        JLabel titleLabel = new JLabel("SJF NON-PREEMPTIVE BASED");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setForeground(Color.white);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(titleLabel, gbc);
+
+        JButton backButton = new JButton("Back");
+        backButton.setBackground(Color.YELLOW);
+        backButton.setForeground(Color.BLACK);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(backButton, gbc);
+
+        backButton.addActionListener(e -> {
+            dispose();
+            new WelcomeScreenUI().setVisible(true);
+        });
+
+        JLabel burstTimeLabel = new JLabel("Burst Time");
+        burstTimeLabel.setForeground(Color.white);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        panel.add(burstTimeLabel, gbc);
+
+        JTextField burstTimeField = new JTextField();
+        burstTimeField.setBackground(Color.LIGHT_GRAY);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        panel.add(burstTimeField, gbc);
+
+        JLabel arrivalTimeLabel = new JLabel("Arrival Time");
+        arrivalTimeLabel.setForeground(Color.white);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(arrivalTimeLabel, gbc);
+
+        JTextField arrivalTimeField = new JTextField();
+        arrivalTimeField.setBackground(Color.LIGHT_GRAY);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        panel.add(arrivalTimeField, gbc);
+
+        JButton runButton = new JButton("Run");
+        runButton.setBackground(Color.YELLOW);
+        runButton.setForeground(Color.black);
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        panel.add(runButton, gbc);
+
+        JTextArea resultArea = new JTextArea(20, 50);
+        resultArea.setBackground(Color.LIGHT_GRAY);
+        resultArea.setEditable(false);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        gbc.gridwidth = 2;
+        panel.add(new JScrollPane(resultArea), gbc);
+
+        runButton.addActionListener(e -> {
+            String burstTimeString = burstTimeField.getText().trim();
+            String arrivalTimeString = arrivalTimeField.getText().trim();
+
+            if (burstTimeString.isEmpty() || arrivalTimeString.isEmpty()) {
+                resultArea.setText("Please enter values in all fields.");
+                return;
+            }
+
+            String[] burstTimesArray = burstTimeString.split(",");
+            String[] arrivalTimesArray = arrivalTimeString.split(",");
+
+            if (burstTimesArray.length != arrivalTimesArray.length) {
+                resultArea.setText("Mismatched input lengths");
+                return;
+            }
+
+            List<NonPreemptiveProcess> processes = new ArrayList<>();
+
+            for (int i = 0; i < burstTimesArray.length; i++) {
+                try {
+                    int burstTime = Integer.parseInt(burstTimesArray[i].trim());
+                    int arrivalTime = Integer.parseInt(arrivalTimesArray[i].trim());
+
+                    if (burstTime < 0 || arrivalTime < 0) {
+                        resultArea.setText("Invalid input at index " + i + ": Please enter non-negative values.\n");
+                        return;
+                    } else {
+                        NonPreemptiveProcess process = new NonPreemptiveProcess("P" + (i + 1), arrivalTime, burstTime);
+                        processes.add(process);
+                    }
+                } catch (NumberFormatException ex) {
+                    resultArea.setText(
+                            "Invalid input at index " + i + ": Please enter valid integer values in all fields.\n");
+                    return;
+                }
+            }
+
+            // Perform SJF non-preemptive scheduling
+            SchedulerNonPreemptive scheduler = new SchedulerNonPreemptive();
+            for (NonPreemptiveProcess process : processes) {
+                scheduler.addProcess(process);
+            }
+            scheduler.run();
+
+            List<GanttChartEntry> ganttChart = scheduler.getGanttChart();
+            double averageWaitingTime = scheduler.getAverageWaitingTime();
+            double averageTurnaroundTime = scheduler.getAverageTurnaroundTime();
+
+            StringBuilder resultText = new StringBuilder("Gantt Chart:\n");
+
+            for (GanttChartEntry entry : ganttChart) {
+                resultText.append(entry.getId())
+                        .append(" [")
+                        .append(entry.getStartTime())
+                        .append(", ")
+                        .append(entry.getEndTime())
+                        .append("] | ");
+            }
+
+            resultText.append("\nAverage Waiting Time: ").append(averageWaitingTime)
+                    .append("\nAverage Turnaround Time: ").append(averageTurnaroundTime);
+
+            resultArea.setText(resultText.toString());
+        });
+
+        add(panel);
+        setLocationRelativeTo(null);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new SJFNonPreemptiveUI().setVisible(true);
+        });
     }
 }
 
@@ -456,5 +673,110 @@ class Scheduler {
 
     public double getAverageTurnaroundTime() {
         return averageTurnaroundTime;
+    }
+}
+
+class SchedulerNonPreemptive {
+    private List<NonPreemptiveProcess> processes;
+    private List<GanttChartEntry> ganttChart;
+    private double averageWaitingTime;
+    private double averageTurnaroundTime;
+
+    public SchedulerNonPreemptive() {
+        processes = new ArrayList<>();
+        ganttChart = new ArrayList<>();
+        averageWaitingTime = 0.0;
+        averageTurnaroundTime = 0.0;
+    }
+
+    public void addProcess(NonPreemptiveProcess process) {
+        processes.add(process);
+    }
+
+    public void run() {
+        int currentTime = 0;
+        int totalProcesses = processes.size();
+        int[] waitingTime = new int[totalProcesses];
+        int[] turnaroundTime = new int[totalProcesses];
+        boolean[] isCompleted = new boolean[totalProcesses];
+        int completed = 0;
+
+        while (completed != totalProcesses) {
+            int idx = -1;
+            int minBurstTime = Integer.MAX_VALUE;
+
+            for (int i = 0; i < totalProcesses; i++) {
+                if (processes.get(i).getArrivalTime() <= currentTime && !isCompleted[i]) {
+                    if (processes.get(i).getBurstTime() < minBurstTime) {
+                        minBurstTime = processes.get(i).getBurstTime();
+                        idx = i;
+                    }
+                    if (processes.get(i).getBurstTime() == minBurstTime) {
+                        if (processes.get(i).getArrivalTime() < processes.get(idx).getArrivalTime()) {
+                            idx = i;
+                        }
+                    }
+                }
+            }
+
+            if (idx != -1) {
+                NonPreemptiveProcess currentProcess = processes.get(idx);
+                ganttChart.add(new GanttChartEntry(currentProcess.getId(), currentTime,
+                        currentTime + currentProcess.getBurstTime()));
+                waitingTime[idx] = currentTime - currentProcess.getArrivalTime();
+                turnaroundTime[idx] = waitingTime[idx] + currentProcess.getBurstTime();
+                currentTime += currentProcess.getBurstTime();
+                isCompleted[idx] = true;
+                completed++;
+            } else {
+                currentTime++;
+            }
+        }
+
+        double totalWaitingTime = 0;
+        double totalTurnaroundTime = 0;
+        for (int i = 0; i < totalProcesses; i++) {
+            totalWaitingTime += waitingTime[i];
+            totalTurnaroundTime += turnaroundTime[i];
+        }
+
+        averageWaitingTime = totalWaitingTime / totalProcesses;
+        averageTurnaroundTime = totalTurnaroundTime / totalProcesses;
+    }
+
+    public List<GanttChartEntry> getGanttChart() {
+        return ganttChart;
+    }
+
+    public double getAverageWaitingTime() {
+        return averageWaitingTime;
+    }
+
+    public double getAverageTurnaroundTime() {
+        return averageTurnaroundTime;
+    }
+}
+
+class NonPreemptiveProcess {
+    private String id;
+    private int arrivalTime;
+    private int burstTime;
+
+    public NonPreemptiveProcess(String id, int arrivalTime, int burstTime) {
+        this.id = id;
+        this.arrivalTime = arrivalTime;
+        this.burstTime = burstTime;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public int getBurstTime() {
+        return burstTime;
     }
 }
